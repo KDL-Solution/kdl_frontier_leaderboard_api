@@ -1,0 +1,23 @@
+{
+  "model": {
+    "__MODEL_NAME__": {
+      "class": "GPT4V",
+      "model": "__MODEL_NAME__",
+      "api_base": "__API_BASE__",
+      "key": "__API_KEY__",
+      "temperature": 0,
+      "img_size": -1,
+      "img_detail": "high",
+      "retry": 3,
+      "timeout": 1800,
+      "max_tokens": 16384,
+      "verbose": false
+    }
+  },
+  "data": {
+    "OCRBench_v2": {
+      "class": "OCRBench_v2",
+      "dataset": "OCRBench_v2"
+    }
+  }
+}

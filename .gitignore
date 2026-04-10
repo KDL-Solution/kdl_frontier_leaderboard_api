@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.py[cod]
+.DS_Store
+
+vlmevalkit/generated/
+vlmevalkit/results/
+vlmevalkit/submission/
