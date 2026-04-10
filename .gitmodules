@@ -1,0 +1,3 @@
+[submodule "vlmevalkit/VLMEvalKit"]
+	path = vlmevalkit/VLMEvalKit
+	url = https://github.com/open-compass/VLMEvalKit.git

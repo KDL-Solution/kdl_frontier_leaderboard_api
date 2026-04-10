@@ -28,6 +28,19 @@ The API follows an OpenAI-compatible multimodal chat-completions format.
 
 ## Setup
 
+Clone the repository with the included VLMEvalKit submodule:
+
+```bash
+git clone --recursive https://github.com/KDL-Solution/kdl_frontier_leaderboard_api.git
+cd kdl_frontier_leaderboard_api
+```
+
+If the repository was already cloned without submodules:
+
+```bash
+git submodule update --init --recursive
+```
+
 ```bash
 cp .env.example .env
 vi .env

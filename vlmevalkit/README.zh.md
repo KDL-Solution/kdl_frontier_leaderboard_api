@@ -22,10 +22,22 @@ DEEPFLOW_MODEL="KDL Frontier"
 ## 前置条件
 
 - 可以运行 VLMEvalKit 的 Python 环境。
-- VLMEvalKit 源码目录。默认路径：`/home/ian/workspace/VLMEvaluation/VLMEvalKit`
+- 本仓库 submodule 中的 VLMEvalKit 源码目录。默认路径：`vlmevalkit/VLMEvalKit`
 - 可以访问 `http://leaderboard.koreadeep.com`
 
-如需指定 VLMEvalKit 路径：
+克隆仓库后初始化 VLMEvalKit submodule：
+
+```bash
+git submodule update --init --recursive
+```
+
+或者直接带 submodule 克隆：
+
+```bash
+git clone --recursive https://github.com/KDL-Solution/kdl_frontier_leaderboard_api.git
+```
+
+仅在需要时指定 VLMEvalKit 路径：
 
 ```bash
 VLMEVALKIT_DIR=/path/to/VLMEvalKit bash vlmevalkit/run_vlmevalkit.sh

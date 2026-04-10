@@ -28,6 +28,19 @@ Authentication: Authorization: Bearer <issued-token>
 
 ## 配置
 
+带 VLMEvalKit submodule 克隆仓库：
+
+```bash
+git clone --recursive https://github.com/KDL-Solution/kdl_frontier_leaderboard_api.git
+cd kdl_frontier_leaderboard_api
+```
+
+如果已经普通克隆过仓库：
+
+```bash
+git submodule update --init --recursive
+```
+
 ```bash
 cp .env.example .env
 vi .env

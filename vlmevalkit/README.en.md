@@ -22,10 +22,22 @@ DEEPFLOW_MODEL="KDL Frontier"
 ## Prerequisites
 
 - Python environment that can run VLMEvalKit.
-- VLMEvalKit source directory. Default path: `/home/ian/workspace/VLMEvaluation/VLMEvalKit`
+- VLMEvalKit source directory from the included submodule. Default path: `vlmevalkit/VLMEvalKit`
 - Network access to `http://leaderboard.koreadeep.com`
 
-Override the VLMEvalKit path if needed:
+Initialize the included VLMEvalKit submodule after cloning this repository:
+
+```bash
+git submodule update --init --recursive
+```
+
+Or clone this repository with submodules:
+
+```bash
+git clone --recursive https://github.com/KDL-Solution/kdl_frontier_leaderboard_api.git
+```
+
+Override the VLMEvalKit path only if needed:
 
 ```bash
 VLMEVALKIT_DIR=/path/to/VLMEvalKit bash vlmevalkit/run_vlmevalkit.sh

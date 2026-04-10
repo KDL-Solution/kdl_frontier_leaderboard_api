@@ -17,7 +17,8 @@ else
   set +a
 fi
 
-VLMEVALKIT_DIR="${VLMEVALKIT_DIR:-/home/ian/workspace/VLMEvaluation/VLMEvalKit}"
+DEFAULT_VLMEVALKIT_DIR="$VLMEVAL_CLIENT_DIR/VLMEvalKit"
+VLMEVALKIT_DIR="${VLMEVALKIT_DIR:-$DEFAULT_VLMEVALKIT_DIR}"
 DEFAULT_PLAY_PYTHON="/home/ian/anaconda3/envs/play/bin/python"
 if [ -x "$DEFAULT_PLAY_PYTHON" ]; then
   PYTHON_BIN="${PYTHON_BIN:-$DEFAULT_PLAY_PYTHON}"
@@ -47,6 +48,7 @@ if [ -z "$DEEPFLOW_API_KEY" ]; then
 fi
 if [ ! -d "$VLMEVALKIT_DIR" ]; then
   echo "VLMEVALKIT_DIR not found: $VLMEVALKIT_DIR" >&2
+  echo "Run: git submodule update --init --recursive" >&2
   exit 2
 fi
 
