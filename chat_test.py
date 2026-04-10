@@ -16,6 +16,20 @@ def _env(name: str, default: str) -> str:
     return os.environ.get(name, default).strip() or default
 
 
+def _load_env_file(path: Path) -> None:
+    if not path.exists():
+        return
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip("\"'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
 def _image_to_url(image: str) -> str:
     if image.startswith(("http://", "https://", "data:")):
         return image
@@ -45,6 +59,8 @@ def _post_json(url: str, payload: dict, *, api_key: str, timeout: float) -> dict
 
 
 def main() -> int:
+    _load_env_file(Path(__file__).resolve().parent / ".env")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default=_env("DEEPFLOW_API_BASE", "http://leaderboard.koreadeep.com"))
     parser.add_argument("--api-key", default=_env("DEEPFLOW_API_KEY", ""))

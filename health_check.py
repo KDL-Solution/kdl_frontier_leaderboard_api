@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from pathlib import Path
 import sys
 import urllib.error
 import urllib.request
@@ -11,6 +12,20 @@ import urllib.request
 
 def _env(name: str, default: str) -> str:
     return os.environ.get(name, default).strip() or default
+
+
+def _load_env_file(path: Path) -> None:
+    if not path.exists():
+        return
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip("\"'")
+        if key and key not in os.environ:
+            os.environ[key] = value
 
 
 def _headers(api_key: str | None = None) -> dict[str, str]:
@@ -43,6 +58,8 @@ def _check(label: str, url: str, *, api_key: str | None = None, timeout: float =
 
 
 def main() -> int:
+    _load_env_file(Path(__file__).resolve().parent / ".env")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default=_env("DEEPFLOW_API_BASE", "http://leaderboard.koreadeep.com"))
     parser.add_argument("--api-key", default=os.environ.get("DEEPFLOW_API_KEY", ""))

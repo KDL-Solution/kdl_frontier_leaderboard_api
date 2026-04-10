@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 .DS_Store
 README.ko.md
+*.jpg
+*.jpeg
+*.png
+*.webp
 
 vlmevalkit/generated/
 vlmevalkit/results/
