@@ -13,12 +13,7 @@ if [ -f "$ENV_FILE" ]; then
   set +a
 fi
 
-DEFAULT_PLAY_PYTHON="/home/ian/anaconda3/envs/play/bin/python"
-if [ -x "$DEFAULT_PLAY_PYTHON" ]; then
-  PYTHON_BIN="${PYTHON_BIN:-$DEFAULT_PLAY_PYTHON}"
-else
-  PYTHON_BIN="${PYTHON_BIN:-$(command -v python3 || command -v python)}"
-fi
+PYTHON_BIN="${PYTHON_BIN:-$(command -v python3 || command -v python)}"
 
 DEEPFLOW_API_BASE="${DEEPFLOW_API_BASE:-http://leaderboard.koreadeep.com}"
 DEEPFLOW_MODEL="${DEEPFLOW_MODEL:-KDL Frontier}"

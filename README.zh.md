@@ -25,6 +25,7 @@ Authentication: Authorization: Bearer <issued-token>
 - `chat_test.py`：向 chat-completions API 发送一个图片问答请求。
 - `run_test.sh`：`chat_test.py` 的 shell 封装。
 - `vlmevalkit/`：用于 OCRBench_v2 的 VLMEvalKit 运行脚本和配置模板。
+- `VLMEvalKit/`：以 git submodule 方式包含的官方 VLMEvalKit 源码。
 
 ## 配置
 

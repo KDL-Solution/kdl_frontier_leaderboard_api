@@ -35,6 +35,19 @@ through a separate secure channel.
 
 ## Required Setup
 
+Clone the repository with VLMEvalKit included:
+
+```bash
+git clone --recursive https://github.com/KDL-Solution/kdl_frontier_leaderboard_api.git
+cd kdl_frontier_leaderboard_api
+```
+
+If the repository was cloned without submodules:
+
+```bash
+git submodule update --init --recursive
+```
+
 ```bash
 cp .env.example .env
 vi .env
@@ -74,7 +87,6 @@ The runner does not require modifying VLMEvalKit. It generates a temporary
 `run.py --config` file that uses VLMEvalKit's OpenAI-compatible `GPT4V` wrapper.
 
 ```bash
-VLMEVALKIT_DIR=/path/to/VLMEvalKit \
 MAX_SAMPLES=0 \
 MODE=all \
 NPROC=10 \

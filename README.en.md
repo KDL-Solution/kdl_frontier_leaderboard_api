@@ -25,6 +25,7 @@ The API follows an OpenAI-compatible multimodal chat-completions format.
 - `chat_test.py`: sends one image-question request to the chat-completions API.
 - `run_test.sh`: shell wrapper for `chat_test.py`.
 - `vlmevalkit/`: VLMEvalKit runner and config template for OCRBench_v2.
+- `VLMEvalKit/`: official VLMEvalKit source included as a git submodule.
 
 ## Setup
 

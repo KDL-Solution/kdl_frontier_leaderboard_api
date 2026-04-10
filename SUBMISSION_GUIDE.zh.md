@@ -33,6 +33,19 @@ API key 不会包含在包内。请通过单独的安全渠道发送分配的 to
 
 ## 必要配置
 
+带 VLMEvalKit 克隆仓库：
+
+```bash
+git clone --recursive https://github.com/KDL-Solution/kdl_frontier_leaderboard_api.git
+cd kdl_frontier_leaderboard_api
+```
+
+如果已经普通克隆过仓库：
+
+```bash
+git submodule update --init --recursive
+```
+
 ```bash
 cp .env.example .env
 vi .env
@@ -72,7 +85,6 @@ python chat_test.py \
 配置，并使用 VLMEvalKit 自带的 OpenAI 兼容 `GPT4V` wrapper。
 
 ```bash
-VLMEVALKIT_DIR=/path/to/VLMEvalKit \
 MAX_SAMPLES=0 \
 MODE=all \
 NPROC=10 \

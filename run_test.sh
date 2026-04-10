@@ -8,10 +8,6 @@ if [ -f "$ENV_FILE" ]; then
   set -a
   source "$ENV_FILE"
   set +a
-else
-  set -a
-  source "$ROOT_DIR/.env.example"
-  set +a
 fi
 
 python "$ROOT_DIR/health_check.py"
