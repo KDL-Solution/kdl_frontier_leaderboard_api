@@ -43,6 +43,45 @@ if [ ! -d "$VLMEVALKIT_DIR" ]; then
   exit 2
 fi
 
+CREATED_VLMEVALKIT_ENV=0
+if [ ! -f "$VLMEVALKIT_DIR/.env" ]; then
+  if touch "$VLMEVALKIT_DIR/.env" 2>/dev/null; then
+    CREATED_VLMEVALKIT_ENV=1
+  fi
+fi
+
+cleanup() {
+  if [ "$CREATED_VLMEVALKIT_ENV" = "1" ]; then
+    rm -f "$VLMEVALKIT_DIR/.env"
+  fi
+}
+trap cleanup EXIT
+
+if [ "${SKIP_VLMEVALKIT_PREFLIGHT:-0}" != "1" ]; then
+  if ! "$PYTHON_BIN" - "$VLMEVALKIT_DIR" <<'PY'
+import importlib.util
+import sys
+from pathlib import Path
+
+vlmevalkit_dir = Path(sys.argv[1]).resolve()
+required = {
+    "dotenv": "python-dotenv",
+    "num2words": "num2words",
+    "openai": "openai",
+    "validators": "validators",
+}
+missing = [package for module, package in required.items() if importlib.util.find_spec(module) is None]
+if missing:
+    print("Missing Python packages for VLMEvalKit: " + ", ".join(missing), file=sys.stderr)
+    print("Install dependencies with:", file=sys.stderr)
+    print(f"  {sys.executable} -m pip install -r {vlmevalkit_dir / 'requirements.txt'}", file=sys.stderr)
+    sys.exit(2)
+PY
+  then
+    exit 2
+  fi
+fi
+
 GENERATED_DIR="$VLMEVAL_CLIENT_DIR/generated"
 CONFIG_FILE="$GENERATED_DIR/kdl_frontier_ocrbench_v2_config.json"
 mkdir -p "$GENERATED_DIR" "$WORK_DIR"

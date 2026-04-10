@@ -62,6 +62,16 @@ DEEPFLOW_MODEL="KDL Frontier"
 
 The API key is not included in this repository. Send or store it separately.
 
+### Install VLMEvalKit Dependencies
+
+Use the same Python environment that will run the evaluation:
+
+```bash
+python -m pip install -r VLMEvalKit/requirements.txt
+```
+
+If `run_vlmevalkit.sh` detects missing packages such as `num2words`, `openai`, or `validators`, run the command above and retry.
+
 ### Health Check
 
 ```bash
@@ -212,6 +222,16 @@ DEEPFLOW_MODEL="KDL Frontier"
 ```
 
 API key 不包含在此仓库中。请通过单独的安全渠道发送或保存。
+
+### 安装 VLMEvalKit 依赖
+
+请使用运行评测时相同的 Python 环境：
+
+```bash
+python -m pip install -r VLMEvalKit/requirements.txt
+```
+
+如果 `run_vlmevalkit.sh` 检测到缺少 `num2words`、`openai` 或 `validators` 等依赖，请先运行上述命令后再重试。
 
 ### 健康检查
 
