@@ -15,6 +15,7 @@ fi
 
 DEFAULT_VLMEVALKIT_DIR="$CLIENT_DIR/VLMEvalKit"
 VLMEVALKIT_DIR="${VLMEVALKIT_DIR:-$DEFAULT_VLMEVALKIT_DIR}"
+REQUIREMENTS_FILE="$VLMEVAL_CLIENT_DIR/requirements.txt"
 PYTHON_BIN="${PYTHON_BIN:-$(command -v python3 || command -v python)}"
 
 DEEPFLOW_API_BASE="${DEEPFLOW_API_BASE:-http://leaderboard.koreadeep.com}"
@@ -58,12 +59,12 @@ cleanup() {
 trap cleanup EXIT
 
 if [ "${SKIP_VLMEVALKIT_PREFLIGHT:-0}" != "1" ]; then
-  if ! "$PYTHON_BIN" - "$VLMEVALKIT_DIR" <<'PY'
+  if ! "$PYTHON_BIN" - "$REQUIREMENTS_FILE" <<'PY'
 import importlib.util
 import sys
-from pathlib import Path
+from importlib.metadata import PackageNotFoundError, version
 
-vlmevalkit_dir = Path(sys.argv[1]).resolve()
+requirements_file = sys.argv[1]
 required = {
     "dotenv": "python-dotenv",
     "num2words": "num2words",
@@ -71,10 +72,33 @@ required = {
     "validators": "validators",
 }
 missing = [package for module, package in required.items() if importlib.util.find_spec(module) is None]
-if missing:
-    print("Missing Python packages for VLMEvalKit: " + ", ".join(missing), file=sys.stderr)
+version_errors = []
+
+try:
+    hf_version = version("huggingface-hub")
+except PackageNotFoundError:
+    missing.append("huggingface-hub>=0.34.0,<1.0")
+else:
+    major = hf_version.split(".", 1)[0]
+    if major.isdigit() and int(major) >= 1:
+        version_errors.append(
+            f"huggingface-hub=={hf_version} is incompatible with transformers; required >=0.34.0,<1.0"
+        )
+
+try:
+    import transformers  # noqa: F401
+except Exception as exc:
+    version_errors.append(f"transformers import failed: {exc}")
+
+if missing or version_errors:
+    if missing:
+        print("Missing Python packages for VLMEvalKit: " + ", ".join(missing), file=sys.stderr)
+    if version_errors:
+        print("Python dependency conflicts for VLMEvalKit:", file=sys.stderr)
+        for error in version_errors:
+            print(f"  - {error}", file=sys.stderr)
     print("Install dependencies with:", file=sys.stderr)
-    print(f"  {sys.executable} -m pip install -r {vlmevalkit_dir / 'requirements.txt'}", file=sys.stderr)
+    print(f"  {sys.executable} -m pip install -r {requirements_file}", file=sys.stderr)
     sys.exit(2)
 PY
   then

@@ -67,10 +67,12 @@ The API key is not included in this repository. Send or store it separately.
 Use the same Python environment that will run the evaluation:
 
 ```bash
-python -m pip install -r VLMEvalKit/requirements.txt
+python -m pip install -r vlmevalkit/requirements.txt
 ```
 
-If `run_vlmevalkit.sh` detects missing packages such as `num2words`, `openai`, or `validators`, run the command above and retry.
+Use the wrapper requirements file above, not `VLMEvalKit/requirements.txt` directly. It installs the official VLMEvalKit requirements and constrains `huggingface-hub>=0.34.0,<1.0` to avoid a Transformers import conflict.
+
+If `run_vlmevalkit.sh` detects missing packages such as `num2words`, `openai`, or `validators`, or reports a `huggingface-hub` version conflict, run the command above and retry.
 
 ### Health Check
 
@@ -228,10 +230,12 @@ API key 不包含在此仓库中。请通过单独的安全渠道发送或保存
 请使用运行评测时相同的 Python 环境：
 
 ```bash
-python -m pip install -r VLMEvalKit/requirements.txt
+python -m pip install -r vlmevalkit/requirements.txt
 ```
 
-如果 `run_vlmevalkit.sh` 检测到缺少 `num2words`、`openai` 或 `validators` 等依赖，请先运行上述命令后再重试。
+请使用上述 wrapper requirements 文件，不要直接安装 `VLMEvalKit/requirements.txt`。它会安装官方 VLMEvalKit 依赖，并限制 `huggingface-hub>=0.34.0,<1.0`，以避免 Transformers 导入冲突。
+
+如果 `run_vlmevalkit.sh` 检测到缺少 `num2words`、`openai`、`validators` 等依赖，或报告 `huggingface-hub` 版本冲突，请先运行上述命令后再重试。
 
 ### 健康检查
 

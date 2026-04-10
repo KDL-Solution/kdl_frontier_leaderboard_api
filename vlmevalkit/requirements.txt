@@ -1,0 +1,2 @@
+-r ../VLMEvalKit/requirements.txt
+huggingface-hub>=0.34.0,<1.0
