@@ -14,6 +14,8 @@ Authentication: Authorization: Bearer <issued-token>
 ```
 
 The API is compatible with OpenAI-style multimodal chat completions.
+Only non-streaming requests are supported. Set `"stream": false` or omit the `stream` field.
+The leaderboard evaluation endpoint is `/v1/chat/completions`.
 
 ### Repository Structure
 
@@ -135,7 +137,9 @@ curl -X POST "http://leaderboard.koreadeep.com/v1/chat/completions" \
 curl http://leaderboard.koreadeep.com/v1/limits
 ```
 
-The public API uses queue-based overflow handling. For stable throughput, keep `NPROC` at or below `max_concurrent_requests_per_token`.
+The public API applies queue-based overflow handling to `/v1/chat/completions`.
+For stable throughput, keep `NPROC` at or below `max_concurrent_requests_per_token`.
+The `limited_paths` value returned by `/v1/limits` should contain only `/v1/chat/completions`.
 
 ### Results
 
@@ -161,6 +165,8 @@ Authentication: Authorization: Bearer <issued-token>
 ```
 
 该 API 兼容 OpenAI 风格的多模态 chat completions 请求格式。
+仅支持非流式请求。请设置 `"stream": false`，或省略 `stream` 字段。
+排行榜评测接口为 `/v1/chat/completions`。
 
 ### 仓库结构
 
@@ -282,7 +288,9 @@ curl -X POST "http://leaderboard.koreadeep.com/v1/chat/completions" \
 curl http://leaderboard.koreadeep.com/v1/limits
 ```
 
-公开 API 使用队列方式处理超限请求。为了获得稳定吞吐，建议 `NPROC` 不超过 `max_concurrent_requests_per_token`。
+公开 API 仅对 `/v1/chat/completions` 使用队列方式处理超限请求。
+为了获得稳定吞吐，建议 `NPROC` 不超过 `max_concurrent_requests_per_token`。
+`/v1/limits` 返回的 `limited_paths` 应只包含 `/v1/chat/completions`。
 
 ### 结果
 
