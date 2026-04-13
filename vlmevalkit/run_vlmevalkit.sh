@@ -25,6 +25,7 @@ OPENAI_API_BASE="${OPENAI_API_BASE:-${DEEPFLOW_API_BASE%/}/v1/chat/completions}"
 WORK_DIR="${WORK_DIR:-$VLMEVAL_CLIENT_DIR/results}"
 MAX_SAMPLES="${MAX_SAMPLES:-5}"
 NPROC="${NPROC:-4}"
+DATASET_NAME="${DATASET_NAME:-${DATA:-OCRBench_v2}}"
 if [ -z "${MODE:-}" ]; then
   if [ "$MAX_SAMPLES" -gt 0 ]; then
     MODE="infer"
@@ -41,6 +42,16 @@ fi
 if [ ! -d "$VLMEVALKIT_DIR" ]; then
   echo "VLMEVALKIT_DIR not found: $VLMEVALKIT_DIR" >&2
   echo "Run: git submodule update --init --recursive" >&2
+  exit 2
+fi
+SUPPORTS_MAX_SAMPLES=0
+if grep -q -- "--max-samples" "$VLMEVALKIT_DIR/run.py"; then
+  SUPPORTS_MAX_SAMPLES=1
+fi
+if [ "$MAX_SAMPLES" -gt 0 ] && [ "$SUPPORTS_MAX_SAMPLES" != "1" ] && [ "$DATASET_NAME" != "OCRBench_v2_MINI" ]; then
+  echo "This VLMEvalKit checkout does not support --max-samples." >&2
+  echo "For a smoke test, run: DATASET_NAME=OCRBench_v2_MINI MAX_SAMPLES=0 MODE=infer NPROC=4 bash vlmevalkit/run_vlmevalkit.sh" >&2
+  echo "For the full benchmark, run: MAX_SAMPLES=0 MODE=all NPROC=10 bash vlmevalkit/run_vlmevalkit.sh" >&2
   exit 2
 fi
 
@@ -107,7 +118,7 @@ PY
 fi
 
 GENERATED_DIR="$VLMEVAL_CLIENT_DIR/generated"
-CONFIG_FILE="$GENERATED_DIR/kdl_frontier_ocrbench_v2_config.json"
+CONFIG_FILE="${CONFIG_FILE:-$GENERATED_DIR/kdl_frontier_ocrbench_v2_${DATASET_NAME}_$$_config.json}"
 mkdir -p "$GENERATED_DIR" "$WORK_DIR"
 
 TEMPLATE_FILE="$VLMEVAL_CLIENT_DIR/config.kdl_frontier_ocrbench_v2.json.template" \
@@ -115,6 +126,7 @@ CONFIG_FILE="$CONFIG_FILE" \
 MODEL_NAME="$DEEPFLOW_MODEL" \
 API_BASE="$OPENAI_API_BASE" \
 API_KEY="$DEEPFLOW_API_KEY" \
+DATASET_NAME="$DATASET_NAME" \
 "$PYTHON_BIN" - <<'PY'
 import json
 import os
@@ -126,6 +138,7 @@ rendered = (
     .replace("__MODEL_NAME__", os.environ["MODEL_NAME"])
     .replace("__API_BASE__", os.environ["API_BASE"])
     .replace("__API_KEY__", os.environ["API_KEY"])
+    .replace("__DATASET_NAME__", os.environ["DATASET_NAME"])
 )
 payload = json.loads(rendered)
 Path(os.environ["CONFIG_FILE"]).write_text(
@@ -140,13 +153,16 @@ echo "=========================================="
 echo "  VLMEVALKIT_DIR : $VLMEVALKIT_DIR"
 echo "  API_BASE       : $OPENAI_API_BASE"
 echo "  MODEL          : $DEEPFLOW_MODEL"
-echo "  DATA           : OCRBench_v2"
+echo "  DATA           : $DATASET_NAME"
 echo "  WORK_DIR       : $WORK_DIR"
 echo "  MAX_SAMPLES    : $MAX_SAMPLES"
 echo "  NPROC          : $NPROC"
 echo "  MODE           : $MODE"
 echo "  DRY_RUN        : $DRY_RUN"
 echo "=========================================="
+if [ "$MAX_SAMPLES" -gt 0 ] && [ "$SUPPORTS_MAX_SAMPLES" != "1" ]; then
+  echo "[info] This VLMEvalKit checkout does not support --max-samples; MAX_SAMPLES will be ignored for $DATASET_NAME."
+fi
 
 echo "[1/2] Health check"
 "$PYTHON_BIN" "$CLIENT_DIR/health_check.py" --base-url "$DEEPFLOW_API_BASE"
@@ -158,7 +174,7 @@ ARGS=(
   --api-nproc "$NPROC"
   --mode "$MODE"
 )
-if [ "$MAX_SAMPLES" -gt 0 ]; then
+if [ "$MAX_SAMPLES" -gt 0 ] && [ "$SUPPORTS_MAX_SAMPLES" = "1" ]; then
   ARGS+=(--max-samples "$MAX_SAMPLES")
 fi
 

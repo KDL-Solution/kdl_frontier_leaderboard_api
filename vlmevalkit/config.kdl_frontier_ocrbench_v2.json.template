@@ -15,9 +15,9 @@
     }
   },
   "data": {
-    "OCRBench_v2": {
+    "__DATASET_NAME__": {
       "class": "OCRBench_v2",
-      "dataset": "OCRBench_v2"
+      "dataset": "__DATASET_NAME__"
     }
   }
 }

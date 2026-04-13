@@ -113,7 +113,7 @@ MAX_SAMPLES=0 MODE=all NPROC=10 bash vlmevalkit/run_vlmevalkit.sh
 Run a small smoke test:
 
 ```bash
-MAX_SAMPLES=5 MODE=infer NPROC=4 bash vlmevalkit/run_vlmevalkit.sh
+DATASET_NAME=OCRBench_v2_MINI MAX_SAMPLES=0 MODE=infer NPROC=4 bash vlmevalkit/run_vlmevalkit.sh
 ```
 
 The runner uses the root `VLMEvalKit/` submodule by default. To use another VLMEvalKit checkout:
@@ -276,7 +276,7 @@ MAX_SAMPLES=0 MODE=all NPROC=10 bash vlmevalkit/run_vlmevalkit.sh
 运行小规模连通性测试：
 
 ```bash
-MAX_SAMPLES=5 MODE=infer NPROC=4 bash vlmevalkit/run_vlmevalkit.sh
+DATASET_NAME=OCRBench_v2_MINI MAX_SAMPLES=0 MODE=infer NPROC=4 bash vlmevalkit/run_vlmevalkit.sh
 ```
 
 默认使用仓库根目录下的 `VLMEvalKit/` submodule。如需使用其他 VLMEvalKit 路径：
